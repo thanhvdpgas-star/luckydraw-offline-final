@@ -1,4 +1,5 @@
 (()=>{
+  const css=document.createElement('link');css.rel='stylesheet';css.href='final-polish.css';document.head.appendChild(css);
   const $=s=>document.querySelector(s);
   const overlay=document.createElement('div');
   overlay.id='winnerReveal'; overlay.className='winnerReveal hidden';
@@ -8,35 +9,10 @@
   $('#revealClose').onclick=close;
   $('#revealResults').onclick=()=>{close();openPage('results')};
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!overlay.classList.contains('hidden'))close();else openPage('draw')}});
-
-  function currentBatch(){
-    try{const p=data.prizes[selected]; if(!p)return[]; const all=prizeResults(p); return all.slice(-Math.min(p.drawCount,all.length));}catch{return[]}
-  }
-  function showReveal(){
-    const p=data.prizes[selected]; const ws=currentBatch(); if(!p||!ws.length)return;
-    $('#revealPrize').textContent=p.name.toUpperCase();
-    $('#revealSummary').textContent=ws.length>1?`${ws.length} người trúng giải trong lượt quay này`:'';
-    $('#revealCards').className='revealCards '+(ws.length===1?'single':'multiple');
-    $('#revealCards').innerHTML=ws.map((w,i)=>`<div class="revealCard" style="--delay:${i*110}ms"><div class="revealCode">${esc(w.code||'')}</div><div class="revealName">${esc(w.name||w.code||'')}</div><div class="revealRole">${esc(w.position||w.company||'')}</div></div>`).join('');
-    overlay.classList.remove('hidden','pop'); void overlay.offsetWidth; overlay.classList.add('pop'); fx();
-  }
-  let lastCount=0;
-  const winner=$('#winner');
-  if(winner)new MutationObserver(()=>{const count=data.results.length;if(count>lastCount&&winner.textContent.trim())showReveal();lastCount=count;},{childList:true,subtree:true,characterData:true});
-  setTimeout(()=>{lastCount=data.results.length},0);
-
-  function renderPrizeTabs(){
-    const host=document.querySelector('.winnerPanel .tabs'); if(!host)return;
-    host.innerHTML=data.prizes.map((p,i)=>`<button class="stagePrizeTab ${i===selected?'active':''}" data-i="${i}">${esc(p.name)}</button>`).join('');
-    host.querySelectorAll('button').forEach(b=>b.onclick=()=>{selected=+b.dataset.i;stage();renderPrizeTabs();renderStagePrizeResults()});
-  }
-  function renderStagePrizeResults(){
-    const p=data.prizes[selected]; if(!p)return; const rows=prizeResults(p).slice(-8);
-    $('#stageResults').innerHTML='<tr><th>STT</th><th>Mã trúng thưởng</th><th>Họ và tên</th><th>Bộ phận</th></tr>'+(rows.length?rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.code)}</td><td>${esc(r.name)}</td><td>${esc(r.position||r.company)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Chưa có kết quả nào</td></tr>');
-  }
-  const oldRenderPrizes=renderPrizes;
-  renderPrizes=function(){oldRenderPrizes();renderPrizeTabs();renderStagePrizeResults()};
-  document.querySelectorAll('.modalPage .close').forEach(b=>b.onclick=()=>openPage('draw'));
-  document.querySelector('.stagePage')?.addEventListener('dblclick',e=>{if(!e.target.closest('button,input,select,.winnerPanel'))desktop.fullscreen()});
-  renderPrizeTabs();renderStagePrizeResults();
+  function currentBatch(){try{const p=data.prizes[selected];if(!p)return[];const all=prizeResults(p);return all.slice(-Math.min(p.drawCount,all.length));}catch{return[]}}
+  function showReveal(){const p=data.prizes[selected],ws=currentBatch();if(!p||!ws.length)return;$('#revealPrize').textContent=p.name.toUpperCase();$('#revealSummary').textContent=ws.length>1?`${ws.length} người trúng giải trong lượt quay này`:'';$('#revealCards').className='revealCards '+(ws.length===1?'single':'multiple');$('#revealCards').innerHTML=ws.map((w,i)=>`<div class="revealCard" style="--delay:${i*110}ms"><div class="revealCode">${esc(w.code||'')}</div><div class="revealName">${esc(w.name||w.code||'')}</div><div class="revealRole">${esc(w.position||w.company||'')}</div></div>`).join('');overlay.classList.remove('hidden','pop');void overlay.offsetWidth;overlay.classList.add('pop');fx()}
+  let lastCount=0;const winner=$('#winner');if(winner)new MutationObserver(()=>{const count=data.results.length;if(count>lastCount&&winner.textContent.trim())showReveal();lastCount=count},{childList:true,subtree:true,characterData:true});setTimeout(()=>{lastCount=data.results.length},0);
+  function renderPrizeTabs(){const host=document.querySelector('.winnerPanel .tabs');if(!host)return;host.innerHTML=data.prizes.map((p,i)=>`<button class="stagePrizeTab ${i===selected?'active':''}" data-i="${i}">${esc(p.name)}</button>`).join('');host.querySelectorAll('button').forEach(b=>b.onclick=()=>{selected=+b.dataset.i;stage();renderPrizeTabs();renderStagePrizeResults()})}
+  function renderStagePrizeResults(){const p=data.prizes[selected];if(!p)return;const rows=prizeResults(p).slice(-8);$('#stageResults').innerHTML='<tr><th>STT</th><th>Mã trúng thưởng</th><th>Họ và tên</th><th>Bộ phận</th></tr>'+(rows.length?rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.code)}</td><td>${esc(r.name)}</td><td>${esc(r.position||r.company)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Chưa có kết quả nào</td></tr>')}
+  const oldRenderPrizes=renderPrizes;renderPrizes=function(){oldRenderPrizes();renderPrizeTabs();renderStagePrizeResults()};document.querySelectorAll('.modalPage .close').forEach(b=>b.onclick=()=>openPage('draw'));document.querySelector('.stagePage')?.addEventListener('dblclick',e=>{if(!e.target.closest('button,input,select,.winnerPanel'))desktop.fullscreen()});renderPrizeTabs();renderStagePrizeResults();
 })();
