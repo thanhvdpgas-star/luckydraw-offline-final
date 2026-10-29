@@ -13,12 +13,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
       - name: Install dependencies
         run: npm install
       - name: Copy XLSX browser runtime
         shell: pwsh
         run: Copy-Item node_modules/xlsx/dist/xlsx.full.min.js renderer/xlsx.full.min.js
+      - name: Validate JavaScript syntax
+        shell: pwsh
+        run: |
+          node --check main.js
+          node --check preload.js
+          node --check renderer/app.js
       - name: Build Windows installer and portable EXE
         run: npm run build:win
       - name: Create source ZIP
