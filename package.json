@@ -1,0 +1,26 @@
+{
+  "name": "luckydraw-offline-final",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline lucky draw desktop application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win nsis portable"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "39.2.7",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "vn.luckydraw.offline",
+    "productName": "LuckyDraw Offline",
+    "directories": {"output": "dist"},
+    "files": ["main.js", "preload.js", "renderer/**/*", "package.json"],
+    "win": {"target": ["nsis", "portable"], "artifactName": "LuckyDraw-Offline-${version}-${arch}.${ext}"},
+    "nsis": {"oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true}
+  }
+}
