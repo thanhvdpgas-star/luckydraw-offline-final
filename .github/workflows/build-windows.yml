@@ -1,0 +1,35 @@
+name: Build Windows Final
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Copy XLSX browser runtime
+        shell: pwsh
+        run: Copy-Item node_modules/xlsx/dist/xlsx.full.min.js renderer/xlsx.full.min.js
+      - name: Build Windows installer and portable EXE
+        run: npm run build:win
+      - name: Create source ZIP
+        shell: pwsh
+        run: Compress-Archive -Path main.js,preload.js,renderer,package.json,README_VI.md -DestinationPath dist/LuckyDraw_Offline_Final_Source.zip -Force
+      - name: Upload final artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LuckyDraw_Offline_Final
+          path: |
+            dist/*.exe
+            dist/*.zip
+          if-no-files-found: error
+          retention-days: 30
