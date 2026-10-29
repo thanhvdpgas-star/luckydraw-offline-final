@@ -1,0 +1,1 @@
+const{contextBridge,ipcRenderer}=require('electron');contextBridge.exposeInMainWorld('desktop',{load:()=>ipcRenderer.invoke('data:load'),save:d=>ipcRenderer.invoke('data:save',d),fullscreen:()=>ipcRenderer.invoke('fullscreen'),backup:d=>ipcRenderer.invoke('backup',d),restore:()=>ipcRenderer.invoke('restore'),printPdf:()=>ipcRenderer.invoke('printPdf')});
