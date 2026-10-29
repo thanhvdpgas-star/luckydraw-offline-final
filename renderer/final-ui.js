@@ -1,34 +1,42 @@
 (()=>{
   const $=s=>document.querySelector(s);
   const overlay=document.createElement('div');
-  overlay.id='winnerReveal';
-  overlay.className='winnerReveal hidden';
-  overlay.innerHTML=`<div class="revealBurst"></div><div class="revealInner"><div class="revealCrown">♛</div><div class="revealLead">CHÚC MỪNG</div><div id="revealPrize" class="revealPrize"></div><div id="revealCards" class="revealCards"></div><div class="revealActions"><button id="revealClose">Tiếp tục quay</button><button id="revealResults">Xem kết quả</button></div></div>`;
+  overlay.id='winnerReveal'; overlay.className='winnerReveal hidden';
+  overlay.innerHTML=`<div class="revealBurst"></div><div class="revealInner"><div class="revealCrown">♛</div><div class="revealLead">Chúc mừng</div><div id="revealPrize" class="revealPrize"></div><div id="revealSummary" class="revealSummary"></div><div id="revealCards" class="revealCards"></div><div class="revealActions"><button id="revealResults">XEM TẤT CẢ</button><button id="revealClose" class="goldAction">ĐÓNG</button></div></div>`;
   document.body.appendChild(overlay);
   const close=()=>overlay.classList.add('hidden');
   $('#revealClose').onclick=close;
-  $('#revealResults').onclick=()=>{close();document.querySelector('[data-page="results"]')?.click()};
-  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  $('#revealResults').onclick=()=>{close();openPage('results')};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!overlay.classList.contains('hidden'))close();else openPage('draw')}});
 
-  let last='';
+  function currentBatch(){
+    try{const p=data.prizes[selected]; if(!p)return[]; const all=prizeResults(p); return all.slice(-Math.min(p.drawCount,all.length));}catch{return[]}
+  }
+  function showReveal(){
+    const p=data.prizes[selected]; const ws=currentBatch(); if(!p||!ws.length)return;
+    $('#revealPrize').textContent=p.name.toUpperCase();
+    $('#revealSummary').textContent=ws.length>1?`${ws.length} người trúng giải trong lượt quay này`:'';
+    $('#revealCards').className='revealCards '+(ws.length===1?'single':'multiple');
+    $('#revealCards').innerHTML=ws.map((w,i)=>`<div class="revealCard" style="--delay:${i*110}ms"><div class="revealCode">${esc(w.code||'')}</div><div class="revealName">${esc(w.name||w.code||'')}</div><div class="revealRole">${esc(w.position||w.company||'')}</div></div>`).join('');
+    overlay.classList.remove('hidden','pop'); void overlay.offsetWidth; overlay.classList.add('pop'); fx();
+  }
+  let lastCount=0;
   const winner=$('#winner');
-  if(winner)new MutationObserver(()=>{
-    const text=winner.textContent.trim();
-    if(!text||text===last)return;
-    last=text;
-    const prize=$('#prizeLabel')?.textContent||'GIẢI THƯỞNG';
-    const values=[...document.querySelectorAll('#roller span')].map(x=>x.textContent).join('');
-    const names=text.split(' · ').filter(Boolean);
-    $('#revealPrize').textContent=prize;
-    $('#revealCards').innerHTML=names.map((n,i)=>`<div class="revealCard" style="--delay:${i*90}ms"><div class="revealCode">${names.length===1?values:(i+1).toString().padStart(2,'0')}</div><div class="revealName"></div><div class="revealRole">NGƯỜI TRÚNG GIẢI</div></div>`).join('');
-    [...document.querySelectorAll('.revealName')].forEach((el,i)=>el.textContent=names[i]);
-    overlay.classList.remove('hidden');
-    overlay.classList.remove('pop'); void overlay.offsetWidth; overlay.classList.add('pop');
-  },{childList:true,subtree:true,characterData:true});
+  if(winner)new MutationObserver(()=>{const count=data.results.length;if(count>lastCount&&winner.textContent.trim())showReveal();lastCount=count;},{childList:true,subtree:true,characterData:true});
+  setTimeout(()=>{lastCount=data.results.length},0);
 
-  // Make modal close buttons consistently return to the draw stage.
-  document.querySelectorAll('.modalPage .close').forEach(b=>b.onclick=()=>document.querySelector('[data-page="draw"]')?.click());
-  // Double click the stage to toggle fullscreen, useful on LED/projector screens.
-  document.querySelector('.stagePage')?.addEventListener('dblclick',e=>{if(!e.target.closest('button,input,select,.winnerPanel'))window.desktop?.fullscreen?.()});
+  function renderPrizeTabs(){
+    const host=document.querySelector('.winnerPanel .tabs'); if(!host)return;
+    host.innerHTML=data.prizes.map((p,i)=>`<button class="stagePrizeTab ${i===selected?'active':''}" data-i="${i}">${esc(p.name)}</button>`).join('');
+    host.querySelectorAll('button').forEach(b=>b.onclick=()=>{selected=+b.dataset.i;stage();renderPrizeTabs();renderStagePrizeResults()});
+  }
+  function renderStagePrizeResults(){
+    const p=data.prizes[selected]; if(!p)return; const rows=prizeResults(p).slice(-8);
+    $('#stageResults').innerHTML='<tr><th>STT</th><th>Mã trúng thưởng</th><th>Họ và tên</th><th>Bộ phận</th></tr>'+(rows.length?rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.code)}</td><td>${esc(r.name)}</td><td>${esc(r.position||r.company)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Chưa có kết quả nào</td></tr>');
+  }
+  const oldRenderPrizes=renderPrizes;
+  renderPrizes=function(){oldRenderPrizes();renderPrizeTabs();renderStagePrizeResults()};
+  document.querySelectorAll('.modalPage .close').forEach(b=>b.onclick=()=>openPage('draw'));
+  document.querySelector('.stagePage')?.addEventListener('dblclick',e=>{if(!e.target.closest('button,input,select,.winnerPanel'))desktop.fullscreen()});
+  renderPrizeTabs();renderStagePrizeResults();
 })();
