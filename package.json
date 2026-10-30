@@ -1,5 +1,5 @@
 {
-  "name":"luckydraw-offline-final","version":"3.0.0","private":true,"description":"Offline lucky draw desktop application - deep source database integration","author":"LuckyDraw Offline","main":"main.js",
+  "name":"luckydraw-offline-final","version":"3.1.0","private":true,"description":"Offline lucky draw desktop application - per-prize runtime, draw styles and sound integration","author":"LuckyDraw Offline","main":"main.js",
   "scripts":{"start":"electron .","build:win":"electron-builder --win nsis portable --publish never"},
   "dependencies":{"xlsx":"^0.18.5"},"devDependencies":{"electron":"39.2.7","electron-builder":"^25.1.8"},
   "build":{"appId":"vn.luckydraw.offline","productName":"LuckyDraw Offline","directories":{"output":"dist"},"files":["main.js","preload.js","renderer/**/*","package.json"],"win":{"target":[{"target":"nsis","arch":["x64"]},{"target":"portable","arch":["x64"]}]},"nsis":{"artifactName":"LuckyDraw-Offline-Setup-${version}-${arch}.${ext}","oneClick":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true},"portable":{"artifactName":"LuckyDraw-Offline-Portable-${version}-${arch}.${ext}"}}
