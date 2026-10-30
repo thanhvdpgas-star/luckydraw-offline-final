@@ -1,0 +1,22 @@
+(()=>{
+const $=s=>document.querySelector(s),db=window.LUCKY_MEDIA_DB||{};
+let manualArmed=false,manualTimer=null,bgAudio=null;
+function prize(){return data?.prizes?.[selected]||null}
+function ensurePrize(p){if(!p)return;p.drawType=p.drawType||'AUTO';p.drawStyle=p.drawStyle||'standard';p.spinTime=Math.max(1,+p.spinTime||+data.settings.duration||3);p.stopDuration=Math.max(.1,+p.stopDuration||1);p.celebration=p.celebration||'paper';p.musicId=p.musicId||''}
+function media(id){return (db.music||[]).find(x=>x.id===id)}
+function soundCfg(){return data?.settings?.sound||db.soundDefaults||{}}
+function stopMusic(){if(bgAudio){bgAudio.pause();bgAudio.currentTime=0;bgAudio=null}}
+function playPrizeMusic(){const p=prize();if(!p)return;ensurePrize(p);const s=soundCfg();if(s.musicMode!=='PER_PRIZE'||!p.musicId)return;const m=media(p.musicId);if(!m)return;stopMusic();bgAudio=new Audio(encodeURI(m.src));bgAudio.loop=s.playOrder==='REPEAT_ONE';bgAudio.volume=Math.max(0,Math.min(1,(+s.musicVolume||70)/100));bgAudio.play().catch(()=>{})}
+function duck(on){if(!bgAudio)return;const s=soundCfg(),base=Math.max(0,Math.min(1,(+s.musicVolume||70)/100));bgAudio.volume=on&&s.duckDuringDraw?base*.22:base}
+function applyPrizeRuntime(){const p=prize();if(!p)return;ensurePrize(p);const r=$('#roller');if(r){['standard','multi_row','staged','globe'].forEach(x=>r.classList.remove('draw-'+x));r.classList.add('draw-'+p.drawStyle);r.dataset.drawStyle=p.drawStyle}const dur=$('#duration');if(dur)dur.value=p.spinTime;const btn=$('#drawBtn');if(btn)btn.textContent=p.drawType==='MANUAL'&&manualArmed?'DỪNG':'BẮT ĐẦU'}
+function extendPrizeEditor(){const form=$('#prizeForm');if(!form||$('#pSpinTime'))return;const b=$('#addPrize'),field=(id,label,html)=>{const l=document.createElement('label');l.className='field';l.innerHTML=`<span>${label}</span>${html}`;form.insertBefore(l,b)};field('pSpinTime','Thời gian quay','<input id="pSpinTime" type="number" min="1" max="60" value="3">');field('pStopDuration','Thời gian dừng','<input id="pStopDuration" type="number" min="0.1" max="10" step="0.1" value="1">')}
+function addPrizeEditButtons(){document.querySelectorAll('#prizeList .card').forEach((c,i)=>{if(c.querySelector('.runtimeEdit'))return;const p=data.prizes[i];ensurePrize(p);const actions=c.lastElementChild;if(!actions)return;const b=document.createElement('button');b.type='button';b.className='runtimeEdit';b.textContent='Cấu hình';b.onclick=async()=>{const type=prompt('Kiểu quay: AUTO hoặc MANUAL',p.drawType);if(type===null)return;const spin=prompt('Thời gian quay (giây)',p.spinTime);if(spin===null)return;const stop=prompt('Thời gian dừng (giây)',p.stopDuration);if(stop===null)return;p.drawType=String(type).toUpperCase()==='MANUAL'?'MANUAL':'AUTO';p.spinTime=Math.max(1,+spin||3);p.stopDuration=Math.max(.1,+stop||1);await save();renderPrizes();applyPrizeRuntime()};actions.prepend(b)})}
+const oldRender=window.renderPrizes;if(oldRender)window.renderPrizes=function(){oldRender();addPrizeEditButtons();applyPrizeRuntime()};
+extendPrizeEditor();
+const form=$('#prizeForm');if(form)form.addEventListener('submit',()=>{const p=data.prizes[data.prizes.length-1];if(p){p.spinTime=Math.max(1,+$('#pSpinTime')?.value||+data.settings.duration||3);p.stopDuration=Math.max(.1,+$('#pStopDuration')?.value||1);save()}},false);
+const btn=$('#drawBtn');if(btn){btn.addEventListener('click',e=>{const p=prize();if(!p)return;ensurePrize(p);if(p.drawType==='MANUAL'){if(manualArmed){e.preventDefault();e.stopImmediatePropagation();manualArmed=false;btn.textContent='ĐANG DỪNG...';document.dispatchEvent(new CustomEvent('lucky:manual-stop'));return}manualArmed=true;btn.textContent='DỪNG';clearTimeout(manualTimer);manualTimer=setTimeout(()=>{if(manualArmed){manualArmed=false;btn.textContent='BẮT ĐẦU'}},Math.max(15000,p.spinTime*4000))}duck(true);if(!bgAudio)playPrizeMusic()},true)}
+const winner=$('#winner');if(winner)new MutationObserver(()=>{if(winner.textContent.trim()){manualArmed=false;clearTimeout(manualTimer);duck(false);setTimeout(applyPrizeRuntime,50)}},{childList:true,subtree:true,characterData:true});
+const oldChoose=window.choose;if(oldChoose)window.choose=i=>{stopMusic();oldChoose(i);applyPrizeRuntime();playPrizeMusic()};
+setTimeout(()=>{data.prizes.forEach(ensurePrize);addPrizeEditButtons();applyPrizeRuntime()},0);
+window.LuckyPrizeRuntime={apply:applyPrizeRuntime,stopMusic,playPrizeMusic,duck};
+})();
