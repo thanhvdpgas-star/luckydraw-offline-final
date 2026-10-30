@@ -18,12 +18,24 @@ jobs:
       - name: Copy XLSX browser runtime
         shell: pwsh
         run: Copy-Item node_modules/xlsx/dist/xlsx.full.min.js renderer/xlsx.full.min.js
+      - name: Restore source media library
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force renderer/sounds,renderer/music | Out-Null
+          $base='https://quaysotrungthuong.vn'
+          $files=@(
+            '/sounds/game-click-s2.mp3','/sounds/sm-turnon.mp3','/sounds/sm-turnoff.mp3','/sounds/sm-roller-loop.mp3','/sounds/sm-spin.mp3','/sounds/sm-bet.mp3','/sounds/game-sm-jackpot-coming.mp3','/sounds/game-sm-jackpot-win.mp3','/sounds/game-countdown.mp3','/sounds/game-tada.mp3','/sounds/fanfare-winner.mp3','/sounds/game-levelup-s3.mp3','/sounds/game-over.mp3','/sounds/game-bonus.mp3','/sounds/swoosh.mp3','/sounds/crowd-applause-and-cheering.mp3','/sounds/crowd-cheer-in-school.mp3','/sounds/upbeat.mp3','/sounds/you-win.mp3','/sounds/cjing.mp3','/sounds/bg.mp3','/sounds/nhac-xo-so-mien-bac.mp3',
+            '/music/Giải thưởng âm nhạc hoành tráng.mp3','/music/Nhạc nền lễ trao giải hoành tráng.mp3','/music/Nhạc nền lễ trao giải mạnh mẽ cao trào hấp dẫn.mp3','/music/Nhạc sự kiện ấn tượng, sống động.mp3','/music/Nhạc sự kiện bùng nổ.mp3','/music/Nhạc sự kiện cuốn hút, kịch tính.mp3','/music/Nhạc sự kiện nhẹ nhàng, vui tươi.mp3','/music/Nhạc sự kiện nhiều cảm xúc.mp3','/music/Nhạc trao giải cao trào.mp3'
+          )
+          foreach($f in $files){$dest='renderer'+$f; try { Invoke-WebRequest -Uri ($base+$f) -OutFile $dest -UseBasicParsing -TimeoutSec 45; Write-Host "OK $f" } catch { Write-Warning "Media unavailable: $f" }}
       - name: Validate JavaScript syntax
         shell: pwsh
         run: |
           node --check main.js
           node --check preload.js
           node --check renderer/app.js
+          node --check renderer/media-db.js
+          node --check renderer/final-ui.js
       - name: Build Windows installer and portable EXE
         run: npm run build:win
       - name: Create source ZIP
