@@ -1,0 +1,32 @@
+window.LUCKY_MEDIA_DB={themes:[
+{id:'tet_red_gold',name:'Tết - Đỏ vàng thanh lịch',group:'tet',bg:'radial-gradient(circle at 50% 38%,#b51f16 0,#98160f 38%,#72100d 72%,#3b0908 100%)',accent:'#ffd85a',tile:'linear-gradient(#c73d42,#a72c31)',text:'#fff7dc'},
+{id:'luxury_gold',name:'Luxury Gold',group:'luxury',bg:'radial-gradient(circle at 50% 30%,#6b5210,#171008 72%)',accent:'#ffd700',tile:'linear-gradient(135deg,#FFD700,#B8860B)',text:'#fff'},
+{id:'neon_purple_glow',name:'Neon Purple Glow',group:'neon',bg:'radial-gradient(circle at 50% 35%,#35105e,#090715 72%)',accent:'#a855f7',tile:'linear-gradient(135deg,#8B5CF6,#7C3AED)',text:'#fff'},
+{id:'neon_blue_electric',name:'Neon Blue Electric',group:'neon',bg:'radial-gradient(circle at 50% 35%,#07385a,#050a19 72%)',accent:'#06B6D4',tile:'linear-gradient(135deg,#0EA5E9,#3B82F6)',text:'#fff'},
+{id:'fire_neon_pink',name:'Fire Neon Pink',group:'party',bg:'radial-gradient(circle at 50% 35%,#5b153d,#160816 72%)',accent:'#EC4899',tile:'linear-gradient(135deg,#EC4899,#DB2777)',text:'#fff'},
+{id:'diamond_crystal',name:'Diamond Crystal',group:'luxury',bg:'linear-gradient(135deg,#3c4250,#111827 65%)',accent:'#ffffff',tile:'linear-gradient(135deg,#E8E8E8,#FFFFFF 45%,#C0C0C0)',text:'#1A1A2E'},
+{id:'black_gold_elegant',name:'Black Gold Elegant',group:'luxury',bg:'radial-gradient(circle,#2D2D44,#08080d 75%)',accent:'#FFD700',tile:'linear-gradient(135deg,#1A1A2E,#2D2D44)',text:'#FFD700'},
+{id:'gradient_aurora',name:'Gradient Aurora',group:'neon',bg:'linear-gradient(135deg,#092f2a,#27113c 50%,#45132f)',accent:'#60efff',tile:'linear-gradient(45deg,#00ff87,#60efff 35%,#ff00ff)',text:'#101020'},
+{id:'casino_vegas',name:'Casino Vegas',group:'party',bg:'radial-gradient(circle,#6d0909,#160303 72%)',accent:'#ffd700',tile:'linear-gradient(135deg,#ff0000,#ffd700 50%,#ff0000)',text:'#fff'},
+{id:'floral_light',name:'Floral Light',group:'nature',bg:'linear-gradient(135deg,#522044,#25152f)',accent:'#ff69b4',tile:'linear-gradient(135deg,#ff69b4,#dda0dd,#da70d6)',text:'#fff'},
+{id:'corporate_blue',name:'Corporate Blue',group:'minimal',bg:'linear-gradient(135deg,#07152f,#0f2456)',accent:'#3B82F6',tile:'linear-gradient(135deg,#1E3A8A,#3B82F6)',text:'#fff'},
+{id:'dark_tech',name:'Dark Tech',group:'tech',bg:'radial-gradient(circle,#1f2937,#05070b 75%)',accent:'#60efff',tile:'linear-gradient(135deg,#1F2937,#4B5563)',text:'#fff'},
+{id:'rose_gold',name:'Rose Gold',group:'luxury',bg:'linear-gradient(135deg,#3a2228,#170d13)',accent:'#E0BFB8',tile:'linear-gradient(135deg,#E0BFB8,#C9A0A0)',text:'#35191e'},
+{id:'minimal_white',name:'Minimal White',group:'minimal',bg:'linear-gradient(135deg,#dfe4ea,#f8fafc)',accent:'#334155',tile:'linear-gradient(135deg,#FFFFFF,#F5F5F5)',text:'#111827'},
+{id:'bronze_metallic',name:'Bronze Metallic',group:'luxury',bg:'linear-gradient(135deg,#3b2115,#120b08)',accent:'#CD7F32',tile:'linear-gradient(135deg,#CD7F32,#B8733E)',text:'#fff'}
+],music:[
+{id:'dramatic',name:'Kịch tính mạnh mẽ',group:'Hồi hộp / Kịch tính',src:'sounds/bg.mp3'},
+{id:'energetic',name:'Sôi động bùng nổ',group:'Sôi động / Năng lượng',src:'sounds/cjing.mp3'},
+{id:'lottery',name:'Xổ số miền Bắc',group:'Khác',src:'sounds/nhac-xo-so-mien-bac.mp3'},
+{id:'grand_award',name:'Giải thưởng âm nhạc hoành tráng',group:'Trang trọng / Lễ hội',src:'music/Giải thưởng âm nhạc hoành tráng.mp3'},
+{id:'majestic_ceremony',name:'Nhạc nền lễ trao giải hoành tráng',group:'Trang trọng / Lễ hội',src:'music/Nhạc nền lễ trao giải hoành tráng.mp3'},
+{id:'epic_crescendo',name:'Nhạc nền lễ trao giải mạnh mẽ cao trào hấp dẫn',group:'Trang trọng / Lễ hội',src:'music/Nhạc nền lễ trao giải mạnh mẽ cao trào hấp dẫn.mp3'},
+{id:'vibrant_event',name:'Nhạc sự kiện ấn tượng, sống động',group:'Sôi động / Năng lượng',src:'music/Nhạc sự kiện ấn tượng, sống động.mp3'},
+{id:'explosive_energy',name:'Nhạc sự kiện bùng nổ',group:'Sôi động / Năng lượng',src:'music/Nhạc sự kiện bùng nổ.mp3'},
+{id:'captivating_drama',name:'Nhạc sự kiện cuốn hút, kịch tính',group:'Hồi hộp / Kịch tính',src:'music/Nhạc sự kiện cuốn hút, kịch tính.mp3'},
+{id:'cheerful_delight',name:'Nhạc sự kiện nhẹ nhàng, vui tươi',group:'Khác',src:'music/Nhạc sự kiện nhẹ nhàng, vui tươi.mp3'},
+{id:'emotional_journey',name:'Nhạc sự kiện nhiều cảm xúc',group:'Khác',src:'music/Nhạc sự kiện nhiều cảm xúc.mp3'},
+{id:'climactic_award',name:'Nhạc trao giải cao trào',group:'Trang trọng / Lễ hội',src:'music/Nhạc trao giải cao trào.mp3'}
+],effects:[
+{id:'click',name:'Click hệ thống',src:'sounds/game-click-s2.mp3'},{id:'roller',name:'Âm quay liên tục',src:'sounds/sm-roller-loop.mp3'},{id:'spin',name:'Bắt đầu quay',src:'sounds/sm-spin.mp3'},{id:'jackpot_coming',name:'Jackpot sắp tới',src:'sounds/game-sm-jackpot-coming.mp3'},{id:'jackpot_win',name:'Jackpot chiến thắng',src:'sounds/game-sm-jackpot-win.mp3'},{id:'countdown',name:'Đếm ngược',src:'sounds/game-countdown.mp3'},{id:'tada',name:'Tada',src:'sounds/game-tada.mp3'},{id:'winner',name:'Fanfare người thắng',src:'sounds/fanfare-winner.mp3'},{id:'levelup',name:'Level Up',src:'sounds/game-levelup-s3.mp3'},{id:'bonus',name:'Game Bonus',src:'sounds/game-bonus.mp3'},{id:'swoosh',name:'Swoosh',src:'sounds/swoosh.mp3'},{id:'cheering',name:'Vỗ tay & cổ vũ',src:'sounds/crowd-applause-and-cheering.mp3'},{id:'cheer',name:'Cổ vũ',src:'sounds/crowd-cheer-in-school.mp3'},{id:'upbeat',name:'Upbeat',src:'sounds/upbeat.mp3'},{id:'you_win',name:'You Win',src:'sounds/you-win.mp3'}
+]};
