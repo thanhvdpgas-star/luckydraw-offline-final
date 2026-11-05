@@ -36,6 +36,8 @@ jobs:
           node --check renderer/app.js
           node --check renderer/media-db.js
           node --check renderer/final-ui.js
+      - name: Run regression smoke tests
+        run: npm test
       - name: Build Windows installer and portable EXE
         run: npm run build:win
       - name: Create source ZIP
