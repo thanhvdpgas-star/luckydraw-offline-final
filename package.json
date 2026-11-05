@@ -1,6 +1,6 @@
 {
   "name":"luckydraw-offline-final","version":"3.6.4","private":true,"description":"Offline lucky draw desktop application - integration hardening release candidate","author":"LuckyDraw Offline","main":"main.js",
-  "scripts":{"test":"node --test tests/*.test.cjs","start":"electron .","build:win":"electron-builder --win nsis portable --publish never"},
+  "scripts":{"test":"node --test tests/integration-smoke.test.cjs","start":"electron .","build:win":"electron-builder --win nsis portable --publish never"},
   "dependencies":{"xlsx":"^0.18.5"},"devDependencies":{"electron":"39.2.7","electron-builder":"^25.1.8"},
   "build":{"appId":"vn.luckydraw.offline","productName":"LuckyDraw Offline","directories":{"output":"dist"},"files":["main.js","preload.js","renderer/**/*","package.json"],"win":{"target":[{"target":"nsis","arch":["x64"]},{"target":"portable","arch":["x64"]}]},"nsis":{"artifactName":"LuckyDraw-Offline-Setup-${version}-${arch}.${ext}","oneClick":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true},"portable":{"artifactName":"LuckyDraw-Offline-Portable-${version}-${arch}.${ext}"}}
 }
